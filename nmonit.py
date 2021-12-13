@@ -11,6 +11,8 @@ _retry_strategy = Retry(
      total=3,
      status_forcelist=[429, 500, 502, 503, 504],
      method_whitelist=["HEAD", "GET", "OPTIONS", "POST", "PUT", "DELETE", "PATCH"],
+     # backoff factor plugs into the following {backoff factor} * (2 ** ({number of total retries} - 1))
+     # means 0.5 1 2 4 8 16... as coded
      backoff_factor=1,
 )
 
