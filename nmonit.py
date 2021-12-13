@@ -57,7 +57,7 @@ def _in_sync(connection_string: str) -> Tuple[bool, str, str]:
 
 
 def _out_of_sync(address: str, block_count: str, telemetry_count) -> str:
-    return f"*ALERT*: Block count on the nano node at {address} " + \
+    return f"*ALERT*: Block count on {address} " + \
         f"is more than 0.01% behind the median network values. " + \
         f"Local nano node block count: {block_count}, " + \
         f"Median network block count: {telemetry_count}. " + \
@@ -65,13 +65,13 @@ def _out_of_sync(address: str, block_count: str, telemetry_count) -> str:
 
 
 def _timed_out(address: str) -> str:
-    return f"*ALERT*: Local RPC calls to the nano node at {address} " + \
+    return f"*ALERT*: Local RPC calls to {address} " + \
         f"timed out. Investigation is recommended."
 
 
 def main(connect: str, slack: str, discord: str, nickname: str) -> None:
     if nickname != "":
-        address = nickname
+        address = f"{nickname} ({connect.split(":")[0]})"
     else:
         address = connect.split(":")[0]
     try:
