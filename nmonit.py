@@ -10,7 +10,8 @@ from requests.packages.urllib3.util.retry import Retry
 _retry_strategy = Retry(
      total=3,
      status_forcelist=[429, 500, 502, 503, 504],
-     method_whitelist=["HEAD", "GET", "OPTIONS", "POST", "PUT", "DELETE", "PATCH"],
+     #limited to post only and since this is only used with non-insert codepaths its safe
+     method_whitelist=["POST"],
      # backoff factor plugs into the following {backoff factor} * (2 ** ({number of total retries} - 1))
      # means 0.5 1 2 4 8 16... as coded
      backoff_factor=1,
