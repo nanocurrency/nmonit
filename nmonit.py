@@ -2,7 +2,17 @@
 import argparse
 from typing import Dict, Tuple
 import requests
+from requests import adapters
 
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
+
+_retry_strategy = Retry(
+     total=3,
+     status_forcelist=[429, 500, 502, 503, 504],
+     method_whitelist=["HEAD", "GET", "OPTIONS", "POST", "PUT", "DELETE", "PATCH"],
+     backoff_factor=1,
+)
 
 def _post_webhook(url: str, contents: Dict) -> None:
     requests.post(url=url, headers={
@@ -21,9 +31,13 @@ def _discord_notify(message: str, webhook: str) -> None:
 
 
 def _handle_rpc(connection_string: str, action: str, resp_params: str) -> str:
+    adapter= HTTPAdapter(max_retries=_retry_strategy)
+    http = requests.Session()
+    http.mount('http://', adapter)
+    http.mount('https://', adapter)
     url = f"http://{connection_string}"
     data = {"action": action}
-    r = requests.post(url, json=data, timeout=5, retries=3)
+    r = http.post(url, json=data, timeout=1)
     resp = r.json()
     ret = resp[resp_params]
     return ret
@@ -74,7 +88,7 @@ def main(connect: str, slack: str, discord: str, nickname: str) -> None:
                     _out_of_sync(
                         address, block_count, telemetry_count),
                     discord)
-    except requests.Timeout:
+    except (requests.Timeout, requests.ConnectionError):
         print(_timed_out(address))
         if slack != '':
             _slack_notify(
