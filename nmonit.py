@@ -71,7 +71,7 @@ def _timed_out(address: str) -> str:
 
 def main(connect: str, slack: str, discord: str, nickname: str) -> None:
     if nickname != "":
-        address = f"{nickname} ({connect.split(":")[0]})"
+        address = f"{nickname} ({connect.split(':')[0]})"
     else:
         address = connect.split(":")[0]
     try:
