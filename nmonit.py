@@ -2,7 +2,7 @@
 import argparse
 from typing import Dict, Tuple
 import requests
-from requests import adapters
+import re
 
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
@@ -68,12 +68,15 @@ def _timed_out(address: str) -> str:
     return f"*ALERT*: Local RPC calls to {address} " + \
         f"timed out. Investigation is recommended."
 
+def _filter_host(connect:str) -> str:
+    match = connection_match.match(connect)
+    return match.group('host')
 
 def main(connect: str, slack: str, discord: str, nickname: str) -> None:
     if nickname != "":
-        address = f"{nickname} ({connect.split(':')[0]})"
+        address = f"{nickname} ({_filter_host(connect)})"
     else:
-        address = connect.split(":")[0]
+        address = _filter_host(connect)
     try:
         in_sync, block_count, telemetry_count = _in_sync(connect)
         if not in_sync:
