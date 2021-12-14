@@ -7,6 +7,8 @@ import re
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 
+connection_match = re.compile(r'(?P<host>(\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3})|\[(.*)\]|(.*)):(?P<port>\d{1,65535})')
+
 _retry_strategy = Retry(
      total=3,
      status_forcelist=[429, 500, 502, 503, 504],
