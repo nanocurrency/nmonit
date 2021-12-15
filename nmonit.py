@@ -76,7 +76,7 @@ def _filter_host(connect:str) -> str:
 
 def main(connect: str, slack: str, discord: str, nickname: str) -> None:
     if nickname != "":
-        address = f"{nickname} ({_filter_host(connect)})"
+        address = f"{nickname}"
     else:
         address = _filter_host(connect)
     try:
