@@ -2,12 +2,9 @@
 import argparse
 from typing import Dict, Tuple
 import requests
-import re
 
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
-
-connection_match = re.compile(r'(?P<host>(\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3})|\[(.*)\]|(.*)):(?P<port>\d{1,65535})')
 
 _retry_strategy = Retry(
      total=3,
@@ -70,39 +67,31 @@ def _timed_out(address: str) -> str:
     return f"*ALERT*: Local RPC calls to {address} " + \
         f"timed out. Investigation is recommended."
 
-def _filter_host(connect:str) -> str:
-    match = connection_match.match(connect)
-    return match.group('host')
-
 def main(connect: str, slack: str, discord: str, nickname: str) -> None:
-    if nickname != "":
-        address = f"{nickname} ({_filter_host(connect)})"
-    else:
-        address = _filter_host(connect)
     try:
         in_sync, block_count, telemetry_count = _in_sync(connect)
         if not in_sync:
             print(_out_of_sync(
-                address, block_count, telemetry_count))
+                nickname, block_count, telemetry_count))
             if slack != '':
                 _slack_notify(
                     _out_of_sync(
-                        address, block_count, telemetry_count),
+                        nickname, block_count, telemetry_count),
                     slack)
             if discord != '':
                 _discord_notify(
                     _out_of_sync(
-                        address, block_count, telemetry_count),
+                        nickname, block_count, telemetry_count),
                     discord)
     except (requests.Timeout, requests.ConnectionError):
-        print(_timed_out(address))
+        print(_timed_out(nickname))
         if slack != '':
             _slack_notify(
-                _timed_out(address),
+                _timed_out(nickname),
                 slack)
         if discord != '':
             _discord_notify(
-                _timed_out(address),
+                _timed_out(nickname),
                 discord)
 
 
@@ -117,7 +106,7 @@ if __name__ == "__main__":
                         help='Slack Websocket url to send to')
     parser.add_argument('--discord_webhook', dest='discord', type=str, default='',
                         help='Discord Webhook to send to')
-    parser.add_argument('--nickname', type=str, default='',
+    parser.add_argument('--nickname', type=str, required=True,
                         help='endpoint nickname')
     args = parser.parse_args()
     main(args.connection_string, args.slack,
