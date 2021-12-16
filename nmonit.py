@@ -101,7 +101,7 @@ if __name__ == "__main__":
     Simple Nano Node Monitoring Tool with optional slack and discord webhook notifications
     """)
     parser.add_argument('--connection_string', type=str,
-                        default="localhost:7075", help='RPC connection of node ex: localhost:7075')
+                        default="localhost:7076", help='RPC connection of node ex: localhost:7076')
     parser.add_argument('--slack_webhook', dest='slack', type=str, default='',
                         help='Slack Websocket url to send to')
     parser.add_argument('--discord_webhook', dest='discord', type=str, default='',
