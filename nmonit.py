@@ -106,7 +106,7 @@ if __name__ == "__main__":
                         help='Slack Websocket url to send to')
     parser.add_argument('--discord_webhook', dest='discord', type=str, default='',
                         help='Discord Webhook to send to')
-    parser.add_argument('--nickname', type=str, required=True
+    parser.add_argument('--nickname', type=str, required=True,
                         help='endpoint nickname')
     args = parser.parse_args()
     main(args.connection_string, args.slack,
