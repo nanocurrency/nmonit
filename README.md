@@ -15,7 +15,7 @@ nmonit.py [-h] [--connection_string CONNECTION_STRING] [--slack_webhook SLACK] [
 |Flag|Description|Default
 |-|-|-|
 |-h, --help| show this help message and exit
-|--connection_string| RPC connection to node| localhost:7075
+|--connection_string| RPC connection to node| localhost:7076
 |--slack_webhook| Slack Websocket url to send to|unset
 |--discord_webhook|Discord Webhook to send to|unset
 |--nickname|endpoint nickname|
