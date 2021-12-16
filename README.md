@@ -9,7 +9,7 @@
 
 ### Usage:
 ```bash
-nmonit.py [-h] [--connection_string CONNECTION_STRING] [--slack_webhook SLACK] [--discord_webhook DISCORD] [--nickname NICKNAME]
+nmonit.py [-h] [--connection_string CONNECTION_STRING] [--slack_webhook SLACK] [--discord_webhook DISCORD] --nickname NICKNAME
 ```
 #### optional arguments:
 |Flag|Description|Default
@@ -18,7 +18,7 @@ nmonit.py [-h] [--connection_string CONNECTION_STRING] [--slack_webhook SLACK] [
 |--connection_string| RPC connection to node| localhost:7075
 |--slack_webhook| Slack Websocket url to send to|unset
 |--discord_webhook|Discord Webhook to send to|unset
-|--nickname|endpoint nickname|localhost
+|--nickname|endpoint nickname|
 
 ### [Discord Webhook](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks):
 1) Server Settings
